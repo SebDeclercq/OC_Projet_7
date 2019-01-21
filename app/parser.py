@@ -11,9 +11,9 @@ import requests
 
 
 class Parser:
+    '''Class parsing user input for Google Maps and Wikipedia APIs querying'''
     FRENCH_STOP_WORDS_DB: str = 'https://raw.githubusercontent.com/6/stopwords-json/master/dist/fr.json'
 
-    '''Class parsing user input for Google Maps and Wikipedia APIs querying'''
     def split_words(self, sentence: str) -> List[str]:
         '''Method splitting a sentence to a list of words'''
         list_of_words: List[str] = re.split(r'[\W_]+', sentence.lower())
@@ -24,3 +24,9 @@ class Parser:
         with requests.get(self.FRENCH_STOP_WORDS_DB) as stop_words_db:
             stop_words: List[str] = stop_words_db.json()
         return [s for s in list_of_words if s not in stop_words]
+
+    def clean_sentence(self, sentence: str) -> List[str]:
+        '''Method cleaning user input string for further use in
+           querying APIs'''
+        list_of_words: List[str] = self.split_words(sentence)
+        return self.remove_stop_words(list_of_words)
