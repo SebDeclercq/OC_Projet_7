@@ -27,7 +27,11 @@ class Params:
         ('encore une !', ['encore', 'une'], ''),
         ('aVeC-Des CaractÈres_SpÉciaux:-)',
          ['avec', 'des', 'caractères', 'spéciaux'],
-         'caractères spéciaux')
+         'caractères spéciaux'),
+        ("Salut Grandpy ! Montre-moi où se trouve le beffroi d'Arras stp",
+         ['salut', 'grandpy', 'montre', 'moi', 'où', 'se', 'trouve', 'le',
+         'beffroi', 'd', 'arras', 'stp'],
+         'salut montre trouve beffroi arras')
     )
 
 

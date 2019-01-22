@@ -25,7 +25,7 @@ class Parser:
         '''Constructor'''
         with requests.get(self.FRENCH_STOP_WORDS_DB) as stop_words_db:
             self.stop_words: List[str] = stop_words_db.json()
-        self.stop_words.extend(['grandpy'])
+        self.stop_words.extend(['grandpy', 'stp'])
 
     def split_words(self, sentence: str) -> List[str]:
         '''Method splitting a sentence to a list of words'''
