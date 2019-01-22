@@ -19,15 +19,15 @@ def parser() -> app.parser.Parser:
 
 class Params:
     '''Class sharing reusable values for tests'''
-    sentences: Sequence[Tuple[str, List[str], List[str]]] = (
+    sentences: Sequence[Tuple[str, List[str], str]] = (
         ('Ma super phrase de test',
          ['ma', 'super', 'phrase', 'de', 'test'],
-         ['super', 'phrase', 'test']),
-        ('ET UNE AUTRE', ['et', 'une', 'autre'], []),
-        ('encore une !', ['encore', 'une'], []),
+         'super phrase test'),
+        ('ET UNE AUTRE', ['et', 'une', 'autre'], ''),
+        ('encore une !', ['encore', 'une'], ''),
         ('aVeC-Des CaractÈres_SpÉciaux:-)',
          ['avec', 'des', 'caractères', 'spéciaux'],
-         ['caractères', 'spéciaux'])
+         'caractères spéciaux')
     )
 
 
@@ -46,10 +46,10 @@ class TestParser:
                              Params.sentences)
     def test_remove_stop_words(
             self, _: str, list_of_words: List[str],
-            no_stop_words: List[str], parser: app.parser.Parser
+            no_stop_words: str, parser: app.parser.Parser
     ) -> None:
         '''Checks that the parser correctly removes the stop words'''
-        assert parser.remove_stop_words(list_of_words) == no_stop_words
+        assert parser.remove_stop_words(list_of_words) == no_stop_words.split()
 
     @pytest.mark.parametrize('sentence, _, clean_sentence', Params.sentences)
     def test_clean_sentence(
