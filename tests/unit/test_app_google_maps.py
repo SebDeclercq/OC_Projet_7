@@ -36,6 +36,9 @@ class TestGoogleMaps:
     ) -> None:
         '''Checks that geocode() returns an instance of Position
         with the expected latitude/longitude'''
+        client_mock: mock.Mock = mock.Mock()
+        client_mock.return_value = None
+        monkeypatch.setattr('googlemaps.Client.__init__', client_mock)
         api_mock: mock.Mock = mock.Mock()
         if position is not None:
             api_mock.return_value = [{
@@ -45,8 +48,7 @@ class TestGoogleMaps:
             }]
         else:
             api_mock.return_value = None
-        monkeypatch.setattr('googlemaps.client.__init__', mock.Mock())
-        monkeypatch.setattr('googlemaps.client.geocode', api_mock)
+        monkeypatch.setattr('googlemaps.Client.geocode', api_mock)
         google_maps: app.google_maps.GoogleMaps = app.google_maps.GoogleMaps()
         result: Optional[app.google_maps.Position] = google_maps.geocode(
             search_terms
