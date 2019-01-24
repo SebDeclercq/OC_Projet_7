@@ -2,19 +2,14 @@
 '''
 @note       This test file'll contain all unit tests used to code due
             to the use of TDD as main methodology and to test code evolution
-            for the app.parser.Parser class.
+            for the app.google_maps.GoogleMaps class.
 @author     Sébastien Declercq <sdq@afnor.org>
 @version    0.0.1 (2019-01-20) : init
 '''
 from typing import Optional, Sequence, Tuple
+from unittest import mock
 import pytest
 import app.google_maps
-
-
-@pytest.fixture
-def google_maps() -> app.google_maps.GoogleMaps:
-    '''Fixture instanciating a GoogleMaps object'''
-    return app.google_maps.GoogleMaps()
 
 
 class Params:
@@ -33,18 +28,30 @@ class Params:
 
 class TestGoogleMaps:
     '''Class testing the app.google_maps.GoogleMaps'''
+    @pytest.mark.current_dev
     @pytest.mark.parametrize('search_terms, position',
                              Params.api_queries_and_results)
     def test_search_geocode(
-            self, search_terms: str, position: Optional[Tuple[float, float]],
-            google_maps: app.google_maps.GoogleMaps
+            self, search_terms: str,
+            position: Optional[Tuple[float, float]], monkeypatch
     ) -> None:
         '''Checks that geocode() returns an instance of Position
         with the expected latitude/longitude'''
+        api_mock: mock.Mock = mock.Mock()
+        if position is not None:
+            api_mock.return_value = [{
+                'geometry': {
+                    'location': {'lat': position[0], 'lng': position[1]}
+                }
+            }]
+        else:
+            api_mock.return_value = None
+        monkeypatch.setattr('googlemaps.client.geocode', api_mock)
+        google_maps: app.google_maps.GoogleMaps = app.google_maps.GoogleMaps()
         result: Optional[app.google_maps.Position] = google_maps.geocode(
             search_terms
         )
-        if position:
+        if position is not None:
             assert isinstance(result, app.google_maps.Position)
             assert result == app.google_maps.Position(*position)
         else:
