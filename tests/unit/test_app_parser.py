@@ -19,7 +19,7 @@ def parser() -> app.parser.Parser:
 
 class Params:
     '''Class sharing reusable values for tests'''
-    sentences: Sequence[Tuple[str, List[str], str]] = (
+    raw_sentences: Sequence[Tuple[str, List[str], str]] = (
         ('Ma super phrase de test',
          ['ma', 'super', 'phrase', 'de', 'test'],
          'super phrase test'),
@@ -30,15 +30,25 @@ class Params:
          'caractères spéciaux'),
         ("Salut Grandpy ! Montre-moi où se trouve le beffroi d'Arras stp",
          ['salut', 'grandpy', 'montre', 'moi', 'où', 'se', 'trouve', 'le',
-         'beffroi', 'd', 'arras', 'stp'],
+          'beffroi', 'd', 'arras', 'stp'],
          'salut montre trouve beffroi arras')
+    )
+    cleaned_up_sentences: Sequence[Tuple[str, str]] = (
+        ('trouver adresse mairie arras', 'adresse mairie arras'),
+        ('montre beffroi arras', 'beffroi arras'),
+        ('situe siège afnor', 'siège afnor'),
+        ('je ne veux rien du tout', ''),
+        ('salut dis trouverait boulangerie achicourt',
+         'boulangerie achicourt'),
+        ('propose adresse localise citadelle lille', 'citadelle lille'),
     )
 
 
 class TestParser:
     '''Class testing the app.parser.Parser'''
 
-    @pytest.mark.parametrize('sentence, list_of_words, _', Params.sentences)
+    @pytest.mark.parametrize('sentence, list_of_words, _',
+                             Params.raw_sentences)
     def test_parser_split_sentence(
             self, sentence: str, list_of_words: List[str],
             _: List[str], parser: app.parser.Parser
@@ -47,7 +57,7 @@ class TestParser:
         assert parser.split_words(sentence) == list_of_words
 
     @pytest.mark.parametrize('_, list_of_words, no_stop_words',
-                             Params.sentences)
+                             Params.raw_sentences)
     def test_remove_stop_words(
             self, _: str, list_of_words: List[str],
             no_stop_words: str, parser: app.parser.Parser
@@ -55,10 +65,22 @@ class TestParser:
         '''Checks that the parser correctly removes the stop words'''
         assert parser.remove_stop_words(list_of_words) == no_stop_words.split()
 
-    @pytest.mark.parametrize('sentence, _, clean_sentence', Params.sentences)
+    @pytest.mark.parametrize('sentence, _, clean_sentence',
+                             Params.raw_sentences)
     def test_clean_sentence(
             self, sentence: str, _: List[str], clean_sentence: List[str],
             parser: app.parser.Parser
     ) -> None:
         '''Checks that sentence is correctly cleaned by the parser'''
         assert parser.clean_sentence(sentence) == clean_sentence
+
+    @pytest.mark.current_dev
+    @pytest.mark.parametrize('sentence, expected_sentence',
+                             Params.cleaned_up_sentences)
+    def test_find_useful_info(
+            self, sentence: str, expected_sentence: str,
+            parser: app.parser.Parser
+    ) -> None:
+        '''Checks that the parser doest extract the useful information
+        from a cleaned up sentence'''
+        assert parser.find_useful_info(sentence) == expected_sentence
