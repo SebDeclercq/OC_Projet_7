@@ -46,7 +46,6 @@ class Params:
 
 class TestParser:
     '''Class testing the app.parser.Parser'''
-
     @pytest.mark.parametrize('sentence, list_of_words, _',
                              Params.raw_sentences)
     def test_parser_split_sentence(
@@ -74,7 +73,6 @@ class TestParser:
         '''Checks that sentence is correctly cleaned by the parser'''
         assert parser.clean_sentence(sentence) == clean_sentence
 
-    @pytest.mark.current_dev
     @pytest.mark.parametrize('sentence, expected_sentence',
                              Params.cleaned_up_sentences)
     def test_find_useful_info(
