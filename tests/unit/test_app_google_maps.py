@@ -28,7 +28,6 @@ class Params:
 
 class TestGoogleMaps:
     '''Class testing the app.google_maps.GoogleMaps'''
-    @pytest.mark.current_dev
     @pytest.mark.parametrize('search_terms, position',
                              Params.api_queries_and_results)
     def test_search_geocode(
@@ -46,6 +45,7 @@ class TestGoogleMaps:
             }]
         else:
             api_mock.return_value = None
+        monkeypatch.setattr('googlemaps.client.__init__', mock.Mock())
         monkeypatch.setattr('googlemaps.client.geocode', api_mock)
         google_maps: app.google_maps.GoogleMaps = app.google_maps.GoogleMaps()
         result: Optional[app.google_maps.Position] = google_maps.geocode(
