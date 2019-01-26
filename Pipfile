@@ -14,6 +14,7 @@ pytest = "*"
 pylint = "*"
 "flake8" = "*"
 mypy = "*"
+jupyter = "*"
 
 [requires]
 python_version = "3.7"
