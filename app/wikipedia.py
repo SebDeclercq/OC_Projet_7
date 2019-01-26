@@ -4,7 +4,7 @@
 @author     Sébastien Declercq <sdq@afnor.org>
 @version    0.0.1 (2019-01-24) : init
 '''
-from typing import List
+from typing import List, Optional
 import mediawiki
 from app.google_maps import Position
 
@@ -14,9 +14,7 @@ class Wikipedia:
     method to retrieve a MediaWikiPage content'''
     def __init__(self) -> None:
         '''Constructor'''
-        self.client: mediawiki.mediawiki.MediaWiki = mediawiki.MediaWiki(
-            lang='fr'
-        )
+        self.client: mediawiki.MediaWiki = mediawiki.MediaWiki(lang='fr')
 
     def geosearch(self, position: Position) -> List[str]:
         '''Performs a geosearch on the Wikipedia API
@@ -35,4 +33,8 @@ class Wikipedia:
             title: the title of the page to collect
         Returns:
             An instance of MediaWikiPage'''
-        return self.client.page(title)
+        try:
+            page: Optional[mediawiki.MediaWikiPage] = self.client.page(title)
+        except mediawiki.exceptions.PageError:
+            page = None
+        return page

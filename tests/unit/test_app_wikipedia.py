@@ -6,7 +6,7 @@
 @author     Sébastien Declercq <sdq@afnor.org>
 @version    0.0.1 (2019-01-20) : init
 '''
-from typing import List, Sequence, Tuple
+from typing import List, Optional, Sequence, Tuple
 import mediawiki
 import pytest
 import app.wikipedia
@@ -40,11 +40,12 @@ class Params:
         ]),
         (Position(50.2827966, 2.7600242), [
             'Main Square Festival',
-            "Citadelle d'Arras", "Faubourg d'Amiens British Cemetery, ",
+            "Citadelle d'Arras", "Faubourg d'Amiens British Cemetery, "
             "The Arras Mémorial And The Flying Services Mémorial"
         ]),
+        (Position(0., 20.), []),
     )
-    page_search: Sequence[Tuple[str, str]] = (
+    page_search: Sequence[Tuple[str, Optional[str]]] = (
         ("Hôtel Les Trois Luppars",
          '''L'hôtel Les Trois Luppars est un établissement hô'''),
         ("Beffroi d'Arras",
@@ -55,6 +56,8 @@ class Params:
          '''La citadelle de Lille est un ouvrage militaire bâ'''),
         ("Main Square Festival",
          '''Le Main Square Festival est un festival de musiqu'''),
+        # "random data for fake search" in base64
+        ('cmFuZG9tIGRhdGEgZm9yIGZha2Ugc2VhcmNo', None),
     )
 
 
@@ -71,11 +74,14 @@ class TestWikipedia:
 
     @pytest.mark.parametrize('title, summary_50_char', Params.page_search)
     def test_wikipedia_get_page(
-            self, title: str, summary_50_char: str,
+            self, title: str, summary_50_char: Optional[str],
             wikipedia: app.wikipedia.Wikipedia
     ) -> None:
         '''Checks that the page search returns the expected summary
         (50 first characters)'''
         page = wikipedia.page_search(title)
-        assert isinstance(page, mediawiki.MediaWikiPage)
-        assert page.summary[:49] == summary_50_char
+        if summary_50_char is not None:
+            assert isinstance(page, mediawiki.MediaWikiPage)
+            assert page.summary[:49] == summary_50_char
+        else:
+            assert page is None
