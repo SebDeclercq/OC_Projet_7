@@ -7,6 +7,7 @@
 @version    0.0.1 (2019-01-20) : init
 '''
 from typing import List, Optional, Sequence, Tuple
+from unittest import mock
 import mediawiki
 import pytest
 import app.wikipedia
@@ -14,8 +15,11 @@ from app.google_maps import Position
 
 
 @pytest.fixture
-def wikipedia() -> app.wikipedia.Wikipedia:
+def wikipedia(monkeypatch: None) -> app.wikipedia.Wikipedia:
     '''Fixture instanciating a Wikipedia object'''
+    wiki_mock: mock.Mock = mock.Mock()
+    wiki_mock.return_value = None
+    monkeypatch.setattr('mediawiki.MediaWiki.__init__', wiki_mock)
     return app.wikipedia.Wikipedia()
 
 
@@ -66,19 +70,39 @@ class TestWikipedia:
     @pytest.mark.parametrize('position, expected_list', Params.geosearch)
     def test_wikipedia_geosearch(
             self, position: Position, expected_list: List[str],
-            wikipedia: app.wikipedia.Wikipedia
+            wikipedia: app.wikipedia.Wikipedia, monkeypatch: None
     ) -> None:
         '''Checks that Wikipedia returns the exact expected results (3)'''
+        geosearch_mock: mock.Mock = mock.Mock()
+        geosearch_mock.return_value = expected_list
+        monkeypatch.setattr('mediawiki.MediaWiki.geosearch', geosearch_mock)
+        wikipedia: app.wikipedia.Wikipedia = app.wikipedia.Wikipedia()
         list_results: List[str] = wikipedia.geosearch(position)
         assert list_results == expected_list
 
     @pytest.mark.parametrize('title, summary_50_char', Params.page_search)
     def test_wikipedia_get_page(
             self, title: str, summary_50_char: Optional[str],
-            wikipedia: app.wikipedia.Wikipedia
+            wikipedia: app.wikipedia.Wikipedia, monkeypatch: None
     ) -> None:
         '''Checks that the page search returns the expected summary
         (50 first characters)'''
+        page_mock: mock.Mock = mock.Mock()
+        page_mock.return_value = None
+        # Mocking MediaWikiPage (usually returned by .page())
+        monkeypatch.setattr('mediawiki.MediaWikiPage.__init__', page_mock)
+        page_search_mock: mock.Mock = mock.Mock()
+        if summary_50_char is not None:
+            # Mocking property w/ expected return value
+            summary_mock: mock.PropertyMock = mock.PropertyMock()
+            summary_mock.return_value = summary_50_char
+            monkeypatch.setattr('mediawiki.MediaWikiPage.summary',
+                                summary_mock)
+            page_search_mock.return_value = mediawiki.MediaWikiPage()
+        else:
+            page_search_mock.return_value = None
+        # Mocking .page()
+        monkeypatch.setattr('mediawiki.MediaWiki.page', page_search_mock)
         page = wikipedia.page_search(title)
         if summary_50_char is not None:
             assert isinstance(page, mediawiki.MediaWikiPage)
