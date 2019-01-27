@@ -37,7 +37,6 @@ class Params:
         ('trouver adresse mairie arras', 'adresse mairie arras'),
         ('montre beffroi arras', 'beffroi arras'),
         ('situe siège afnor', 'siège afnor'),
-        ('je ne veux rien du tout', ''),
         ('salut dis trouverait boulangerie achicourt',
          'boulangerie achicourt'),
         ('propose adresse localise citadelle lille', 'citadelle lille'),
