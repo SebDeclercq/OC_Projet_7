@@ -9,7 +9,7 @@
 from typing import Optional, Sequence, Tuple
 from unittest import mock
 import pytest
-import app.google_maps
+from app import google_maps
 
 
 class Params:
@@ -49,12 +49,12 @@ class TestGoogleMaps:
         else:
             api_mock.return_value = None
         monkeypatch.setattr('googlemaps.Client.geocode', api_mock)
-        google_maps: app.google_maps.GoogleMaps = app.google_maps.GoogleMaps()
-        result: Optional[app.google_maps.Position] = google_maps.geocode(
+        googlemaps: google_maps.GoogleMaps = google_maps.GoogleMaps()
+        result: Optional[google_maps.Position] = googlemaps.geocode(
             search_terms
         )
         if position is not None:
-            assert isinstance(result, app.google_maps.Position)
-            assert result == app.google_maps.Position(*position)
+            assert isinstance(result, google_maps.Position)
+            assert result == google_maps.Position(*position)
         else:
             assert result is None

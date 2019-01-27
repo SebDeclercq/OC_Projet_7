@@ -10,44 +10,45 @@ from typing import List, Optional, Sequence, Tuple
 from unittest import mock
 import mediawiki
 import pytest
-import app.wikipedia
-from app.google_maps import Position
+from app import google_maps, wikipedia
 
 
 @pytest.fixture
-def wikipedia(monkeypatch: None) -> app.wikipedia.Wikipedia:
+def wiki(monkeypatch: None) -> wikipedia.Wikipedia:
     '''Fixture instanciating a Wikipedia object'''
     wiki_mock: mock.Mock = mock.Mock()
     wiki_mock.return_value = None
     monkeypatch.setattr('mediawiki.MediaWiki.__init__', wiki_mock)
-    return app.wikipedia.Wikipedia()
+    return wikipedia.Wikipedia()
 
 
 class Params:
     '''Class holding params for parametrized tests'''
-    geosearch: Sequence[Tuple[Position, List[str]]] = (
-        (Position(50.2934211, 2.7787176), [
+    geosearch: Sequence[Tuple[google_maps.Position, List[str]]] = (
+        (google_maps.Position(50.2934211, 2.7787176), [
             'Hôtel Les Trois Luppars',
             "Grand-Place d'Arras",
             'Chapelle des Chariottes',
         ]),
-        (Position(50.2911244, 2.7769304), [
+        (google_maps.Position(50.2911244, 2.7769304), [
             "Beffroi d'Arras",
             "Hôtel de ville d'Arras",
             'Place des Héros (Arras)',
         ]),
-        (Position(50.2724255, 2.7561987), ['Achicourt', "Gare d'Achicourt"]),
-        (Position(50.6409299, 3.0445812), [
+        (google_maps.Position(50.2724255, 2.7561987), [
+            'Achicourt', "Gare d'Achicourt"
+        ]),
+        (google_maps.Position(50.6409299, 3.0445812), [
             'Citadelle de Lille',
             'Les Poussins, Parc de la Citadelle',
             'Esplanade du Champ de Mars (Lille)'
         ]),
-        (Position(50.2827966, 2.7600242), [
+        (google_maps.Position(50.2827966, 2.7600242), [
             'Main Square Festival',
             "Citadelle d'Arras", "Faubourg d'Amiens British Cemetery, "
             "The Arras Mémorial And The Flying Services Mémorial"
         ]),
-        (Position(0., 20.), []),
+        (google_maps.Position(0., 20.), []),
     )
     page_search: Sequence[Tuple[str, Optional[str]]] = (
         ("Hôtel Les Trois Luppars",
@@ -69,21 +70,20 @@ class TestWikipedia:
     '''Class testing the app.wikipedia.Wikipedia'''
     @pytest.mark.parametrize('position, expected_list', Params.geosearch)
     def test_wikipedia_geosearch(
-            self, position: Position, expected_list: List[str],
-            wikipedia: app.wikipedia.Wikipedia, monkeypatch: None
+            self, position: google_maps.Position, expected_list: List[str],
+            wiki: wikipedia.Wikipedia, monkeypatch: None
     ) -> None:
         '''Checks that Wikipedia returns the exact expected results (3)'''
         geosearch_mock: mock.Mock = mock.Mock()
         geosearch_mock.return_value = expected_list
         monkeypatch.setattr('mediawiki.MediaWiki.geosearch', geosearch_mock)
-        wikipedia: app.wikipedia.Wikipedia = app.wikipedia.Wikipedia()
-        list_results: List[str] = wikipedia.geosearch(position)
+        list_results: List[str] = wiki.geosearch(position)
         assert list_results == expected_list
 
     @pytest.mark.parametrize('title, summary_50_char', Params.page_search)
     def test_wikipedia_get_page(
             self, title: str, summary_50_char: Optional[str],
-            wikipedia: app.wikipedia.Wikipedia, monkeypatch: None
+            wiki: wikipedia.Wikipedia, monkeypatch: None
     ) -> None:
         '''Checks that the page search returns the expected summary
         (50 first characters)'''
@@ -103,7 +103,7 @@ class TestWikipedia:
             page_search_mock.return_value = None
         # Mocking .page()
         monkeypatch.setattr('mediawiki.MediaWiki.page', page_search_mock)
-        page = wikipedia.page_search(title)
+        page = wiki.page_search(title)
         if summary_50_char is not None:
             assert isinstance(page, mediawiki.MediaWikiPage)
             assert page.summary[:49] == summary_50_char

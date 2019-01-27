@@ -8,13 +8,13 @@
 '''
 from typing import List, Sequence, Tuple
 import pytest
-import app.parser
+from app import parser
 
 
 @pytest.fixture
-def parser() -> app.parser.Parser:
+def test_parser() -> parser.Parser:
     '''Fixture instanciating a Parser object'''
-    return app.parser.Parser()
+    return parser.Parser()
 
 
 class Params:
@@ -50,35 +50,37 @@ class TestParser:
                              Params.raw_sentences)
     def test_parser_split_sentence(
             self, sentence: str, list_of_words: List[str],
-            _: List[str], parser: app.parser.Parser
+            _: List[str], test_parser: parser.Parser
     ) -> None:
         '''Checks that the parser correctly splits sentences into words'''
-        assert parser.split_words(sentence) == list_of_words
+        assert test_parser.split_words(sentence) == list_of_words
 
     @pytest.mark.parametrize('_, list_of_words, no_stop_words',
                              Params.raw_sentences)
     def test_remove_stop_words(
             self, _: str, list_of_words: List[str],
-            no_stop_words: str, parser: app.parser.Parser
+            no_stop_words: str, test_parser: parser.Parser
     ) -> None:
         '''Checks that the parser correctly removes the stop words'''
-        assert parser.remove_stop_words(list_of_words) == no_stop_words.split()
+        assert test_parser.remove_stop_words(
+            list_of_words
+        ) == no_stop_words.split()
 
     @pytest.mark.parametrize('sentence, _, clean_sentence',
                              Params.raw_sentences)
     def test_clean_sentence(
             self, sentence: str, _: List[str], clean_sentence: List[str],
-            parser: app.parser.Parser
+            test_parser: parser.Parser
     ) -> None:
         '''Checks that sentence is correctly cleaned by the parser'''
-        assert parser.clean_sentence(sentence) == clean_sentence
+        assert test_parser.clean_sentence(sentence) == clean_sentence
 
     @pytest.mark.parametrize('sentence, expected_sentence',
                              Params.cleaned_up_sentences)
     def test_find_useful_info(
             self, sentence: str, expected_sentence: str,
-            parser: app.parser.Parser
+            test_parser: parser.Parser
     ) -> None:
         '''Checks that the parser doest extract the useful information
         from a cleaned up sentence'''
-        assert parser.find_useful_info(sentence) == expected_sentence
+        assert test_parser.find_useful_info(sentence) == expected_sentence

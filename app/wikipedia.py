@@ -6,7 +6,7 @@
 '''
 from typing import List, Optional
 import mediawiki
-from app.google_maps import Position
+from app import google_maps
 
 
 class Wikipedia:
@@ -16,7 +16,7 @@ class Wikipedia:
         '''Constructor'''
         self.client: mediawiki.MediaWiki = mediawiki.MediaWiki(lang='fr')
 
-    def geosearch(self, position: Position) -> List[str]:
+    def geosearch(self, position: google_maps.Position) -> List[str]:
         '''Performs a geosearch on the Wikipedia API
         Params:
             position: used to get GPS data for the search
