@@ -8,6 +8,7 @@ requests = "*"
 nltk = "*"
 googlemaps = "*"
 pymediawiki = "*"
+click = "*"
 
 [dev-packages]
 pytest = "*"
