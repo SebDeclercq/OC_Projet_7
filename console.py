@@ -14,8 +14,11 @@ from app import app
 def grandpy(query: str) -> app.Response:
     '''Simple console UI for the GrandPy App, your favorite
     story teller :-)'''
-    my_app: app.App = app.App()
-    click.echo(my_app.search(query))
+    try:
+        my_app: app.App = app.App()
+        click.echo(my_app.search(query))
+    except Exception as e:
+        click.echo(f'Oops.. Something went wrong : {e} !')
 
 
 if __name__ == '__main__':
