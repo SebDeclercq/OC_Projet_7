@@ -58,4 +58,6 @@ class Parser:
                 idx: int = tokens.index(token)
                 search_sentence = ' '.join(tokens[idx + 1:])
                 break
+        if not search_sentence:
+            search_sentence = sentence
         return search_sentence
