@@ -7,14 +7,15 @@
 @version    0.0.1 (2019-01-20) : init
 '''
 from typing import List, Sequence, Tuple
+from unittest import mock
 import pytest
-from app import parser
+import app.parser
 
 
 @pytest.fixture
-def test_parser() -> parser.Parser:
+def test_parser() -> app.parser.Parser:
     '''Fixture instanciating a Parser object'''
-    return parser.Parser()
+    return app.parser.Parser()
 
 
 class Params:
@@ -49,7 +50,7 @@ class TestParser:
                              Params.raw_sentences)
     def test_parser_split_sentence(
             self, sentence: str, list_of_words: List[str],
-            _: List[str], test_parser: parser.Parser
+            _: List[str], test_parser: app.parser.Parser
     ) -> None:
         '''Checks that the parser correctly splits sentences into words'''
         assert test_parser.split_words(sentence) == list_of_words
@@ -58,27 +59,34 @@ class TestParser:
                              Params.raw_sentences)
     def test_remove_stop_words(
             self, _: str, list_of_words: List[str],
-            no_stop_words: str, test_parser: parser.Parser
+            no_stop_words: str, test_parser: app.parser.Parser
     ) -> None:
         '''Checks that the parser correctly removes the stop words'''
         assert test_parser.remove_stop_words(
             list_of_words
         ) == no_stop_words.split()
 
-    @pytest.mark.parametrize('sentence, _, clean_sentence',
+    @pytest.mark.parametrize('sentence, list_of_words, clean_sentence',
                              Params.raw_sentences)
     def test_clean_sentence(
-            self, sentence: str, _: List[str], clean_sentence: List[str],
-            test_parser: parser.Parser
+            self, sentence: str, list_of_words: List[str],
+            clean_sentence: List[str], monkeypatch
     ) -> None:
         '''Checks that sentence is correctly cleaned by the parser'''
+        split_mock: mock.Mock = mock.Mock()
+        split_mock.return_value = list_of_words
+        rm_stop_mock: mock.Mock = mock.Mock()
+        rm_stop_mock.return_value = clean_sentence.split()
+        monkeypatch.setattr('app.parser.Parser.split_words', split_mock)
+        monkeypatch.setattr('app.parser.Parser.remove_stop_words', rm_stop_mock)
+        test_parser: app.parser.Parser = app.parser.Parser()
         assert test_parser.clean_sentence(sentence) == clean_sentence
 
     @pytest.mark.parametrize('sentence, expected_sentence',
                              Params.cleaned_up_sentences)
     def test_find_useful_info(
             self, sentence: str, expected_sentence: str,
-            test_parser: parser.Parser
+            test_parser: app.parser.Parser
     ) -> None:
         '''Checks that the parser doest extract the useful information
         from a cleaned up sentence'''
