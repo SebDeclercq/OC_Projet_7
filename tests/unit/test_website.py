@@ -2,7 +2,7 @@
 '''
 @note       This test file'll contain all unit tests used to code due
             to the use of TDD as main methodology and to test code evolution
-            for the ui.website class.
+            for the website.website class.
 @author     Sébastien Declercq <sdq@afnor.org>
 @version    0.0.1 (2019-01-31) : init
 '''
@@ -11,7 +11,7 @@ from flask import Response, testing
 from website import website
 
 
-@pytest.fixture(scope='class')
+@pytest.fixture(scope='class', autouse=True)
 def client() -> testing.FlaskClient:
     '''Fixture setting the flask environment up for testing'''
     test_website = website.Website()
@@ -21,8 +21,8 @@ def client() -> testing.FlaskClient:
 
 class TestWebsite:
     '''Test suite for the Website class'''
-    def test_index(self, client: testing.FlaskClient) -> None:
-        '''Checks that the index route returns what is exepected'''
+    def test_index(self) -> None:
+        '''Checks that the index route returns what is expected'''
         r: Response = client.get('/')
         assert r.status_code == 200
         assert r.headers['Content-Type'] == 'text/html; charset=utf-8'
