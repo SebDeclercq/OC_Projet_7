@@ -1,5 +1,4 @@
 GOOGLE_API_KEY=XXXXXX
-TEMPLATE_FOLDER=../website/templates/
 FLASK_APP=website:create_app()
-FLASK_APP=website.py
+FLASK_APP=grandpy.py
 FLASK_ENV=development

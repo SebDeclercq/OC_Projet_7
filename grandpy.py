@@ -4,7 +4,7 @@
 @version    0.0.1 (2019-01-31) : init
 '''
 from flask import Flask
-from ui import website
+from website import website
 
 
 def create_app() -> Flask:
