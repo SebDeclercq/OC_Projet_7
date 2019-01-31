@@ -9,6 +9,7 @@ nltk = "*"
 googlemaps = "*"
 pymediawiki = "*"
 click = "*"
+flask = "*"
 
 [dev-packages]
 pytest = "*"
