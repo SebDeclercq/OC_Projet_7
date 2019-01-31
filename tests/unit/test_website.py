@@ -8,7 +8,7 @@
 '''
 import pytest
 from flask import Response, testing
-from ui import website
+from website import website
 
 
 @pytest.fixture(scope='class')
@@ -26,8 +26,5 @@ class TestWebsite:
         r: Response = client.get('/')
         assert r.status_code == 200
         assert r.headers['Content-Type'] == 'text/html; charset=utf-8'
-        text_excerpt: str = (
-            'Salut mon gars ! Alors, dis à GrandPy, que veux-tu savoir '
-            "aujourd'hui ?"
-        )
+        text_excerpt: str = 'Salut mon gars !'
         assert text_excerpt in r.get_data().decode('utf-8')
