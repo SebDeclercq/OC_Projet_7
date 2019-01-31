@@ -4,6 +4,16 @@
 Bienvenue chez GrandPy !
 {% endblock %}
 
+{% block head %}
+{{ super() }}
+<!--
+    SRC favico: https://cdn.pixabay.com/photo/2013/07/13/13/24/man-160973_960_720.png
+    License: https://pixabay.com/fr/service/terms/#license
+-->
+<link rel="shortcut icon" href="{{ url_for('static', filename='favico.png') }}">
+<script type="text/javascript" src="{{ url_for('static', filename='grandpy.js')}}"></script>
+{% endblock %}
+
 {% block styles %}
 {{ super() }}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='grandpy.css')}}">
@@ -11,6 +21,15 @@ Bienvenue chez GrandPy !
 
 {% block content %}
 <div class="container mt-5">
+    <div class="row">
+        <div class="col col-sm-6">
+            <!--
+                SRC picture: https://cdn.pixabay.com/photo/2012/04/24/13/36/old-40092_960_720.png
+                License: https://pixabay.com/fr/service/terms/#license
+            -->
+            <img id="grandpy" src="{{ url_for('static', filename='grandpy.png')}}">
+        </div>
+    </div>
     <div class="row">
         <div class="col col-lg">
             <h3>Salut mon gars !</h3>
