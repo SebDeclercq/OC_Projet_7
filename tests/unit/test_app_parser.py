@@ -10,12 +10,13 @@ from typing import List, Sequence, Tuple
 from unittest import mock
 import pytest
 import app.parser
+from app import parser
 
 
 @pytest.fixture
-def test_parser() -> app.parser.Parser:
+def test_parser() -> parser.Parser:
     '''Fixture instanciating a Parser object'''
-    return app.parser.Parser()
+    return parser.Parser()
 
 
 class Params:
@@ -50,7 +51,7 @@ class TestParser:
                              Params.raw_sentences)
     def test_parser_split_sentence(
             self, sentence: str, list_of_words: List[str],
-            _: List[str], test_parser: app.parser.Parser
+            _: List[str], test_parser: parser.Parser
     ) -> None:
         '''Checks that the parser correctly splits sentences into words'''
         assert test_parser.split_words(sentence) == list_of_words
@@ -59,7 +60,7 @@ class TestParser:
                              Params.raw_sentences)
     def test_remove_stop_words(
             self, _: str, list_of_words: List[str],
-            no_stop_words: str, test_parser: app.parser.Parser
+            no_stop_words: str, test_parser: parser.Parser
     ) -> None:
         '''Checks that the parser correctly removes the stop words'''
         assert test_parser.remove_stop_words(
@@ -70,7 +71,7 @@ class TestParser:
                              Params.raw_sentences)
     def test_clean_sentence(
             self, sentence: str, list_of_words: List[str],
-            clean_sentence: List[str], monkeypatch
+            clean_sentence: str, monkeypatch
     ) -> None:
         '''Checks that sentence is correctly cleaned by the parser'''
         split_mock: mock.Mock = mock.Mock()
@@ -79,7 +80,7 @@ class TestParser:
         rm_stop_mock.return_value = clean_sentence.split()
         monkeypatch.setattr('app.parser.Parser.split_words', split_mock)
         monkeypatch.setattr('app.parser.Parser.remove_stop_words', rm_stop_mock)
-        test_parser: app.parser.Parser = app.parser.Parser()
+        test_parser: parser.Parser = parser.Parser()
         assert test_parser.clean_sentence(sentence) == clean_sentence
 
     @pytest.mark.parametrize('sentence, expected_sentence',
