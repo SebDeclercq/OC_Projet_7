@@ -15,36 +15,43 @@ class GrandPy {
         // the Flask App to retrieve collected infos based on the
         // user input
         this.form.addEventListener('submit', () => {
-            this.add_query_to_chat(this.input.value);
             let data = new FormData();
             data.append('query', this.input.value);
             let xhr = new XMLHttpRequest();
             xhr.open('POST', '/ask-grandpy');
             xhr.addEventListener('load', () => {
                 const answer = JSON.parse(xhr.responseText);
-                let chat_entry = document.createElement('div');
-                chat_entry.appendChild(
-                    this.create_chat_entry('h4', answer['title'])
+                this.chat_area.appendChild(
+                    this._create_chat_entry(
+                        this.input.value, answer['title'], answer['summary']
+                    )
                 );
-                chat_entry.appendChild(
-                    this.create_chat_entry('p', answer['summary'])
-                );
-                this.chat_area.appendChild(chat_entry);
             });
             xhr.send(data);
         });
     }
-    create_chat_entry(el_name, value) {
+    _create_chat_entry(query, title, summary) {
+        // Creates a new Element representing a chat entry
+        // query: string    The input query
+        // title: string    The title of the wikipedia article
+        // summary: string  The summary of the wikipedia article
+        let chat_entry = document.createElement('div');
+        const values = [
+            ['h3', 'Alors, tu veux savoir ça ?! "' + query + '"'],
+            ['h4', title], ['p', summary],
+        ];
+        for (let value of values) {
+            chat_entry.appendChild(this._create_element(...value));
+        }
+        return chat_entry;
+    }
+    _create_element(el_name, value) {
+        // Simply creates an Element containing a value
+        // el_name: string  Tag name
+        // value: string    Tag content
         let el = document.createElement(el_name);
         el.appendChild(document.createTextNode(value));
-        return el
-    }
-    add_query_to_chat(query) {
-        let h3 = document.createElement('h3')
-        h3.appendChild(document.createTextNode(
-            'Alors, tu veux savoir ça ?! "' + query + '"')
-        )
-        this.chat_area.appendChild(h3)
+        return el;
     }
 }
 
