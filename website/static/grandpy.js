@@ -20,7 +20,7 @@ class GrandPy {
             data.append('query', this.input.value);
             let xhr = new XMLHttpRequest();
             xhr.open('POST', '/ask-grandpy');
-            xhr.onload = () => {
+            xhr.addEventListener('load', () => {
                 const answer = JSON.parse(xhr.responseText);
                 let chat_entry = document.createElement('div');
                 chat_entry.appendChild(
@@ -30,7 +30,7 @@ class GrandPy {
                     this.create_chat_entry('p', answer['summary'])
                 );
                 this.chat_area.appendChild(chat_entry);
-            };
+            });
             xhr.send(data);
         });
     }
@@ -49,7 +49,7 @@ class GrandPy {
 }
 
 // Starts GrandPy up
-window.onload = function() {
+window.addEventListener('load', () => {
     grandpy = new GrandPy();
     grandpy.listen();
-}
+});
