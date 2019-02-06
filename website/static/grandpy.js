@@ -20,25 +20,24 @@ class GrandPy {
             data.append('query', this.input.value);
             let xhr = new XMLHttpRequest();
             xhr.open('POST', '/ask-grandpy');
-            xhr.onload = function() {
-                function create_chat_entry(el_name, value) {
-                    let el = document.createElement(el_name);
-                    el.appendChild(document.createTextNode(value));
-                    return el
-                }
-                const answer = JSON.parse(this.responseText);
+            xhr.onload = () => {
+                const answer = JSON.parse(xhr.responseText);
                 let chat_entry = document.createElement('div');
                 chat_entry.appendChild(
-                        create_chat_entry('h4', answer['title'])
+                    this.create_chat_entry('h4', answer['title'])
                 );
                 chat_entry.appendChild(
-                    create_chat_entry('p', answer['summary'])
+                    this.create_chat_entry('p', answer['summary'])
                 );
-                let chat_area = document.querySelector('div#chat-area');
-                chat_area.appendChild(chat_entry);
-            }
+                this.chat_area.appendChild(chat_entry);
+            };
             xhr.send(data);
-        })
+        });
+    }
+    create_chat_entry(el_name, value) {
+        let el = document.createElement(el_name);
+        el.appendChild(document.createTextNode(value));
+        return el
     }
     add_query_to_chat(query) {
         let h3 = document.createElement('h3')
