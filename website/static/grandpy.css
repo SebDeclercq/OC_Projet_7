@@ -1,3 +1,18 @@
 img#grandpy {
-    width: 25%
+    width: 45%;
+}
+body {
+    background-color:  #EDEDED;
+}
+
+#maindiv {
+    width: 75pc;
+    background-color: #F7F7F7;
+    border-radius: 25px;
+    padding: 1pc;
+    margin-top: 1pc;
+}
+
+div#chat-area {
+    margin-top: 1pc;
 }
