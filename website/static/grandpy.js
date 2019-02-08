@@ -22,14 +22,24 @@ class GrandPy {
             xhr.open('POST', '/ask-grandpy');
             xhr.addEventListener('load', () => {
                 const answer = JSON.parse(xhr.responseText);
-                let chat_entry = this._create_chat_entry(
-                    this.input.value, answer['title'], answer['summary'],
-                    answer['coord'], answer['url']
-                );
+                let chat_entry;
+                if (xhr.status == 200) {
+                    chat_entry = this._create_chat_entry(
+                        this.input.value, answer['title'], answer['summary'],
+                        answer['coord'], answer['url']
+                    );
+                }
+                else if (xhr.status == 400) {
+                    chat_entry = document.createElement('div');
+                    chat_entry.setAttribute('class', 'chat-entry');
+                    chat_entry.appendChild(
+                        document.createTextNode(answer['answer'])
+                    );
+                }
                 this.chat_area.appendChild(chat_entry);
                 this.chat_area.style.display = 'block';
                 this.chat_area.querySelector(
-                        '.chat-entry:last-child'
+                    '.chat-entry:last-child'
                 ).scrollIntoView({ block: 'start',  behavior: 'smooth' });
             });
             xhr.send(data);

@@ -12,7 +12,7 @@ from flask import Response, testing
 from website import website
 
 
-@pytest.fixture(scope='class', autouse=True)
+@pytest.fixture(scope='class')
 def client() -> testing.FlaskClient:
     '''Fixture setting the flask environment up for testing'''
     test_website = website.Website()
@@ -39,7 +39,7 @@ class Params:
             'url': 'https://fr.wikipedia.org/wiki/H%C3%B4tel_Les_Trois_Luppars'
         }),
         # "random data for fake search" in base64
-        ('cmFuZG9tIGRhdGEgZm9yIGZha2Ugc2VhcmNo', 404,
+        ('cmFuZG9tIGRhdGEgZm9yIGZha2Ugc2VhcmNo', 400,
          {"summary": "Je n'ai pas compris"}),
     )
 
@@ -58,5 +58,8 @@ class TestWebsite:
         })
         assert r.status_code == expected_code
         r_content: Dict[str, Any] = r.get_json()
-        r_content['summary'] = r_content['summary'][:49]
-        assert dict_resp == r_content
+        if r.status_code == 200:
+            r_content['summary'] = r_content['summary'][:49]
+            assert dict_resp == r_content
+        else:
+            assert 'answer' in r_content
