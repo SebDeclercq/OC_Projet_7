@@ -6,7 +6,7 @@
 @author     Sébastien Declercq <sdq@afnor.org>
 @version    0.0.1 (2019-01-20) : init
 '''
-from typing import Optional, Sequence, Tuple
+from typing import Any, Optional, Sequence, Tuple
 from unittest import mock
 import pytest
 from app import google_maps
@@ -32,7 +32,7 @@ class TestGoogleMaps:
                              Params.api_queries_and_results)
     def test_search_geocode(
             self, search_terms: str,
-            position: Optional[Tuple[float, float]], monkeypatch
+            position: Optional[Tuple[float, float]], monkeypatch: Any
     ) -> None:
         '''Checks that geocode() returns an instance of Position
         with the expected latitude/longitude'''

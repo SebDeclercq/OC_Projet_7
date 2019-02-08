@@ -6,7 +6,7 @@
 @author     Sébastien Declercq <sdq@afnor.org>
 @version    0.0.1 (2019-01-20) : init
 '''
-from typing import List, Sequence, Tuple
+from typing import Any, List, Sequence, Tuple
 from unittest import mock
 import pytest
 import app.parser
@@ -71,7 +71,7 @@ class TestParser:
                              Params.raw_sentences)
     def test_clean_sentence(
             self, sentence: str, list_of_words: List[str],
-            clean_sentence: str, monkeypatch
+            clean_sentence: str, monkeypatch: Any
     ) -> None:
         '''Checks that sentence is correctly cleaned by the parser'''
         split_mock: mock.Mock = mock.Mock()
@@ -79,7 +79,8 @@ class TestParser:
         rm_stop_mock: mock.Mock = mock.Mock()
         rm_stop_mock.return_value = clean_sentence.split()
         monkeypatch.setattr('app.parser.Parser.split_words', split_mock)
-        monkeypatch.setattr('app.parser.Parser.remove_stop_words', rm_stop_mock)
+        monkeypatch.setattr('app.parser.Parser.remove_stop_words',
+                            rm_stop_mock)
         test_parser: parser.Parser = parser.Parser()
         assert test_parser.clean_sentence(sentence) == clean_sentence
 

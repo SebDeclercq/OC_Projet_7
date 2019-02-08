@@ -22,7 +22,7 @@ class Parser:
         stemmer: an instance of FrenchStemmer form nltk used to find the
                  base form of a word in a sentence for better filtering
     '''
-    FRENCH_STOP_WORDS_DB: str = 'https://raw.githubusercontent.com/6/stopwords-json/master/dist/fr.json'  # pylint: disable=C0301
+    FRENCH_STOP_WORDS_DB: str = 'https://raw.githubusercontent.com/6/stopwords-json/master/dist/fr.json'  # pylint: disable=C0301 # noqa
     LOCALIZATION_VERB_STEMS: List[str] = ['trouv', 'situ', 'montr', 'localis']
 
     def __init__(self) -> None:

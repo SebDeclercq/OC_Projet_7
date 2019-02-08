@@ -6,13 +6,11 @@
 @version    0.0.2 (2019-02-08) : better error handling
 '''
 from typing import List, Optional
-import json
 import random
 import os
 from flask import Flask, jsonify, Response, render_template, request
-from flask.json import JSONEncoder
 from flask_bootstrap import Bootstrap
-from app import app, google_maps
+from app import app
 from dataclasses import asdict
 
 

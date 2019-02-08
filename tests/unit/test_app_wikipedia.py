@@ -6,7 +6,7 @@
 @author     Sébastien Declercq <sdq@afnor.org>
 @version    0.0.1 (2019-01-20) : init
 '''
-from typing import List, Optional, Sequence, Tuple
+from typing import Any, List, Optional, Sequence, Tuple
 from unittest import mock
 import mediawiki
 import pytest
@@ -14,7 +14,7 @@ from app import google_maps, wikipedia
 
 
 @pytest.fixture
-def wiki(monkeypatch: None) -> wikipedia.Wikipedia:
+def wiki(monkeypatch: Any) -> wikipedia.Wikipedia:
     '''Fixture instanciating a Wikipedia object'''
     wiki_mock: mock.Mock = mock.Mock()
     wiki_mock.return_value = None
@@ -24,7 +24,7 @@ def wiki(monkeypatch: None) -> wikipedia.Wikipedia:
 
 class Params:
     '''Class holding params for parametrized tests'''
-    geosearch: Sequence[Tuple[google_maps.Position, List[str]]] = (
+    geosearch: Sequence[Tuple[google_maps.Position, List[str]]] = (  # type: ignore # noqa
         (google_maps.Position(50.2934211, 2.7787176), [
             'Hôtel Les Trois Luppars',
             "Grand-Place d'Arras",
@@ -71,7 +71,7 @@ class TestWikipedia:
     @pytest.mark.parametrize('position, expected_list', Params.geosearch)
     def test_wikipedia_geosearch(
             self, position: google_maps.Position, expected_list: List[str],
-            wiki: wikipedia.Wikipedia, monkeypatch: None
+            wiki: wikipedia.Wikipedia, monkeypatch: Any
     ) -> None:
         '''Checks that Wikipedia returns the exact expected results (3)'''
         geosearch_mock: mock.Mock = mock.Mock()
@@ -83,7 +83,7 @@ class TestWikipedia:
     @pytest.mark.parametrize('title, summary_50_char', Params.page_search)
     def test_wikipedia_get_page(
             self, title: str, summary_50_char: Optional[str],
-            wiki: wikipedia.Wikipedia, monkeypatch: None
+            wiki: wikipedia.Wikipedia, monkeypatch: Any
     ) -> None:
         '''Checks that the page search returns the expected summary
         (50 first characters)'''

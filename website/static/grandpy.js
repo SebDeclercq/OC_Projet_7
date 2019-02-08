@@ -2,6 +2,7 @@
 //             AJAX querying and HTML page updates
 // @author     Sébastien Declercq <sdq@afnor.org>
 // @version    0.0.1 (2019-02-06) : init
+/*jshint esversion: 6 */
 
 class GrandPy {
     // Main Class
@@ -25,15 +26,15 @@ class GrandPy {
                 let chat_entry;
                 if (xhr.status == 200) {
                     chat_entry = this._create_chat_entry(
-                        this.input.value, answer['title'], answer['summary'],
-                        answer['coord'], answer['url']
+                        this.input.value, answer.title, answer.summary,
+                        answer.coord, answer.url
                     );
                 }
                 else if (xhr.status == 400) {
                     chat_entry = document.createElement('div');
                     chat_entry.setAttribute('class', 'chat-entry');
                     chat_entry.appendChild(
-                        document.createTextNode(answer['answer'])
+                        document.createTextNode(answer.answer)
                     );
                 }
                 this.chat_area.appendChild(chat_entry);
@@ -79,7 +80,7 @@ class GrandPy {
         //                  for google map display
         let div_map = document.createElement('div');
         div_map.setAttribute('class', 'map');
-        let coord_obj = {lat: coord['latitude'], lng: coord['longitude']};
+        let coord_obj = {lat: coord.latitude, lng: coord.longitude};
         let map = new google.maps.Map(div_map, {
           zoom: 15,
           center: coord_obj
@@ -104,6 +105,6 @@ class GrandPy {
 
 // Starts GrandPy up
 window.addEventListener('load', () => {
-    grandpy = new GrandPy();
+    let grandpy = new GrandPy();
     grandpy.listen();
 });
