@@ -31,7 +31,10 @@ class Website:
         '''Sets the routes up'''
         @self.app.route('/', methods=['GET'])
         def index() -> str:
-            return render_template('index.html.j2')
+            return render_template(
+                'index.html.j2',
+                google_public_api_key=os.environ.get('GOOGLE_PUBLIC_API_KEY')
+            )
 
         @self.app.route('/ask-grandpy', methods=['POST'])
         def ask_grandpy() -> Response:

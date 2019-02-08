@@ -42,3 +42,9 @@ div.chat-entry h3 {
 div.chat-entry p {
     text-align: justify;
 }
+
+ div.chat-entry div.map {
+     align: center;
+     height: 300px;
+     width: 750px;
+ }

@@ -10,6 +10,7 @@ class GrandPy {
         this.input = this.form.querySelector('input#ask-grandpy');
         this.chat_area = document.querySelector('div#chat-area');
     }
+
     listen() {
         // Sets the event listener up : on form submit, queries
         // the Flask App to retrieve collected infos based on the
@@ -21,11 +22,11 @@ class GrandPy {
             xhr.open('POST', '/ask-grandpy');
             xhr.addEventListener('load', () => {
                 const answer = JSON.parse(xhr.responseText);
-                this.chat_area.appendChild(
-                    this._create_chat_entry(
-                        this.input.value, answer['title'], answer['summary']
-                    )
+                let chat_entry = this._create_chat_entry(
+                    this.input.value, answer['title'], answer['summary'],
+                    answer['coord'],
                 );
+                this.chat_area.appendChild(chat_entry);
                 this.chat_area.style.display = 'block';
                 this.chat_area.querySelector(
                         '.chat-entry:last-child'
@@ -34,11 +35,14 @@ class GrandPy {
             xhr.send(data);
         });
     }
-    _create_chat_entry(query, title, summary) {
+
+    _create_chat_entry(query, title, summary, coord) {
         // Creates a new Element representing a chat entry
         // query: string    The input query
         // title: string    The title of the wikipedia article
         // summary: string  The summary of the wikipedia article
+        // coord: object    The object containing latitude and longitude
+        //                  for google map display
         let chat_entry = document.createElement('div');
         chat_entry.setAttribute('class', 'chat-entry');
         const values = [
@@ -48,8 +52,29 @@ class GrandPy {
         for (let value of values) {
             chat_entry.appendChild(this._create_element(...value));
         }
+        chat_entry.appendChild(this._create_map(coord));
         return chat_entry;
     }
+
+    _create_map(coord) {
+        // Creates a new Element containing the Google Map
+        // coord: object    The object containing latitude and longitude
+        //                  for google map display
+        let div_map = document.createElement('div');
+        div_map.setAttribute('class', 'map');
+        let coord_obj = {lat: coord['latitude'], lng: coord['longitude']};
+        let map = new google.maps.Map(div_map, {
+          zoom: 15,
+          center: coord_obj
+        });
+        let marker = new google.maps.Marker({
+          position: coord_obj,
+          map: map,
+          title: "Ce que tu cherches, c'est là, mon gars !!!"
+        });
+        return div_map;
+    }
+
     _create_element(el_name, value) {
         // Simply creates an Element containing a value
         // el_name: string  Tag name
