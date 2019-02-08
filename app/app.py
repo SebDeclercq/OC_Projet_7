@@ -3,6 +3,7 @@
 @note       Main class for the App
 @author     Sébastien Declercq <sdq@afnor.org>
 @version    0.0.1 (2019-01-27) : init
+@version    0.0.2 (2019-02-08) : url now in Response object
 '''
 from typing import List, Optional
 import mediawiki
@@ -16,6 +17,7 @@ class Response:
     title: str
     coord: google_maps.Position
     summary: str
+    url: str
 
 
 class App:
@@ -42,15 +44,16 @@ class App:
                     return Response(
                         title=page.title,
                         coord=location,
-                        summary=page.summary
+                        summary=page.summary,
+                        url=page.url
                     )
 
-    def _parse_query(self, query) -> str:  # pylint: disable=R1710
+    def _parse_query(self, query: str) -> str:  # pylint: disable=R1710
         '''Private method interacting with the parser'''
         query = self.parser.clean_sentence(query)
         return self.parser.find_useful_info(query)
 
-    def _find_coords(self, query: str) -> google_maps.Position:
+    def _find_coords(self, query: str) -> Optional[google_maps.Position]:
         '''Private method interacting with the Google Maps API'''
         return self.google_maps.geocode(query)
 

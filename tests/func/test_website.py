@@ -3,6 +3,7 @@
 @note       This test file'll contain all functional tests for the Website.
 @author     Sébastien Declercq <sdq@afnor.org>
 @version    0.0.1 (2019-01-31) : init
+@version    0.0.2 (2019-02-08) : url now in app.Response object
 '''
 from typing import Any, Dict, Sequence, Tuple
 import json
@@ -26,19 +27,20 @@ class Params:
             'coord': {
                 'latitude': 50.6366327, 'longitude': 3.0629882
             },
-            'summary': 'La colonne de la déesse est un monument commémora'
+            'summary': 'La colonne de la déesse est un monument commémora',
+            'url': 'https://fr.wikipedia.org/wiki/Colonne_de_la_D%C3%A9esse'
         }),
         ("Bonjour ! Trouve-moi l'adresse de la mairie d'Arras, stp !", 200, {
             'title': 'Hôtel Les Trois Luppars',
             'coord': {
                 'latitude': 50.2934211, 'longitude': 2.7787176
             },
-            'summary': "L'hôtel Les Trois Luppars est un établissement hô"
+            'summary': "L'hôtel Les Trois Luppars est un établissement hô",
+            'url': 'https://fr.wikipedia.org/wiki/H%C3%B4tel_Les_Trois_Luppars'
         }),
         # "random data for fake search" in base64
         ('cmFuZG9tIGRhdGEgZm9yIGZha2Ugc2VhcmNo', 404,
-            {"summary": "Je n'ai pas compris"}
-        ),
+         {"summary": "Je n'ai pas compris"}),
     )
 
 

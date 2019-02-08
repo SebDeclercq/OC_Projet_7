@@ -5,6 +5,7 @@
             for the website.website class.
 @author     Sébastien Declercq <sdq@afnor.org>
 @version    0.0.1 (2019-01-31) : init
+@version    0.0.1 (2019-02-08) : debugged test_index()
 '''
 import pytest
 from flask import Response, testing
@@ -21,7 +22,7 @@ def client() -> testing.FlaskClient:
 
 class TestWebsite:
     '''Test suite for the Website class'''
-    def test_index(self) -> None:
+    def test_index(self, client: testing.FlaskClient) -> None:
         '''Checks that the index route returns what is expected'''
         r: Response = client.get('/')
         assert r.status_code == 200
