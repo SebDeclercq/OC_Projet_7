@@ -2,12 +2,12 @@ img#grandpy {
     width: 45%;
 }
 body {
-    background-color:  #EDEDED;
+    background-color: #ededed;
 }
 
 #maindiv {
     width: 75pc;
-    background-color: #F7F7F7;
+    background-color: #f7f7f7;
     border-radius: 25px;
     padding: 1pc;
     margin-top: 1pc;
@@ -15,4 +15,30 @@ body {
 
 div#chat-area {
     margin-top: 1pc;
+    text-align: center;
+    height: 30em;
+    overflow-y: scroll;
+    flex-direction: column-reverse;
+    flex-grow: 1;
+    display: none;
+}
+
+div.chat-entry {
+    width: 50pc;
+    border-radius: 25px;
+    padding: 1pc;
+    margin-top: 1pc;
+    border: 1px solid #b7b7b7;
+    display: inline-block;
+    flex: 1;
+    background-color: #ededed;
+}
+
+div.chat-entry h3 {
+    border-bottom: 1px solid #b7b7b7;
+    padding-bottom: 10px;
+}
+
+div.chat-entry p {
+    text-align: justify;
 }

@@ -26,6 +26,10 @@ class GrandPy {
                         this.input.value, answer['title'], answer['summary']
                     )
                 );
+                this.chat_area.style.display = 'block';
+                this.chat_area.querySelector(
+                        '.chat-entry:last-child'
+                ).scrollIntoView({ block: 'start',  behavior: 'smooth' });
             });
             xhr.send(data);
         });
@@ -36,6 +40,7 @@ class GrandPy {
         // title: string    The title of the wikipedia article
         // summary: string  The summary of the wikipedia article
         let chat_entry = document.createElement('div');
+        chat_entry.setAttribute('class', 'chat-entry');
         const values = [
             ['h3', 'Alors, tu veux savoir ça ?! "' + query + '"'],
             ['h4', title], ['p', summary],
