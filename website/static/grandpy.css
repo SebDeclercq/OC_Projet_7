@@ -49,7 +49,16 @@ div.chat-entry p {
      width: 750px;
  }
 
- .form-control:focus {
-   border-color: #b7b7b7;
-   box-shadow: inset 0 1px 1px #b7b7b7, 0 0 8px #b7b7b7;
- }
+.form-control:focus {
+    border-color: #b7b7b7;
+    box-shadow: inset 0 1px 1px #b7b7b7, 0 0 8px #b7b7b7;
+}
+
+@media (max-width: 640px) {
+    div#logo {
+        display: none;
+    }
+    input#ask-grandpy {
+        width: 100px;
+    }
+}
