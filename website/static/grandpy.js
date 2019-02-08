@@ -24,7 +24,7 @@ class GrandPy {
                 const answer = JSON.parse(xhr.responseText);
                 let chat_entry = this._create_chat_entry(
                     this.input.value, answer['title'], answer['summary'],
-                    answer['coord'],
+                    answer['coord'], answer['url']
                 );
                 this.chat_area.appendChild(chat_entry);
                 this.chat_area.style.display = 'block';
@@ -36,7 +36,7 @@ class GrandPy {
         });
     }
 
-    _create_chat_entry(query, title, summary, coord) {
+    _create_chat_entry(query, title, summary, coord, url) {
         // Creates a new Element representing a chat entry
         // query: string    The input query
         // title: string    The title of the wikipedia article
@@ -52,6 +52,13 @@ class GrandPy {
         for (let value of values) {
             chat_entry.appendChild(this._create_element(...value));
         }
+        let url_el = document.createElement('a');
+        url_el.setAttribute('href', url);
+        url_el.setAttribute('_target', 'blank');
+        url_el.appendChild(
+            document.createTextNode(" Tu veux encore plus d'infos ?")
+        );
+        chat_entry.querySelector('p').appendChild(url_el);
         chat_entry.appendChild(this._create_map(coord));
         return chat_entry;
     }
