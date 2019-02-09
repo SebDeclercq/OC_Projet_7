@@ -1,6 +1,17 @@
 img#grandpy {
     width: 45%;
 }
+
+img#github-ico {
+    width: 20px;
+    height: 20px;
+}
+
+img#linkedin-ico {
+    width: 20px;
+    height: 20px;
+}
+
 body {
     background-color: #ededed;
 }
@@ -11,6 +22,24 @@ body {
     border-radius: 25px;
     padding: 1pc;
     margin-top: 1pc;
+}
+
+footer {
+    width: 75%;
+    height: 5%;
+    position: fixed;
+    background-color: #f7f7f7;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    right: 12.5%;
+    padding-left: 5%;
+    bottom: 0;
+    vertical-align: center;
+    text-align: center;
+}
+
+footer a:hover {
+    text-decoration: none;
 }
 
 div#chat-area {
@@ -63,6 +92,9 @@ div.chat-entry p {
     }
     div.chat-entry {
         width: 95%;
+    }
+    footer {
+        height: 7%;
     }
 }
 
