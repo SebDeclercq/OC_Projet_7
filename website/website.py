@@ -4,8 +4,10 @@
 @author     Sébastien Declercq <sdq@afnor.org>
 @version    0.0.1 (2019-01-31) : init
 @version    0.0.2 (2019-02-08) : better error handling
+@version    0.0.3 (2019-02-15) : escaping HTML Wikipedia response
 '''
 from typing import List, Optional
+import html
 import random
 import os
 from flask import Flask, jsonify, Response, render_template, request
@@ -55,7 +57,11 @@ class Website:
             query: str = request.form['query']
             app_resp: Optional[app.Response] = self.grandpy.search(query)
             if app_resp:
+                app_resp.summary = html.escape(app_resp.summary, quote=False)
+                app_resp.title = html.escape(app_resp.title, quote=False)
                 return jsonify(asdict(app_resp)), 200
             else:
                 answer: str = random.choice(self.wrong_query_answers).rstrip()
-                return jsonify({"answer": answer}), 400
+                return jsonify(
+                    {"answer": html.escape(answer, quote=False)}
+                ), 400
