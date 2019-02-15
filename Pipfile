@@ -11,6 +11,7 @@ pymediawiki = "*"
 click = "*"
 flask = "*"
 "flask-bootstrap4" = "*"
+gunicorn = "*"
 
 [dev-packages]
 pytest = "*"
