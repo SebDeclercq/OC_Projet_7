@@ -1,1 +1,1 @@
-gunicorn grandpy:create_app
+pipenv run gunicorn grandpy:create_app
