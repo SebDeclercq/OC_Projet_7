@@ -1,1 +1,1 @@
-pipenv run gunicorn grandpy:create_app
+web: pipenv run gunicorn grandpy:create_app
