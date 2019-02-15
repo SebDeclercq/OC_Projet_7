@@ -1,1 +1,1 @@
-web: gunicorn grandpy:create_app
+web: gunicorn DEPLOY:app
