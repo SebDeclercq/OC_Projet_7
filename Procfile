@@ -1,1 +1,1 @@
-web: pipenv run gunicorn DEPLOY:app
+web: gunicorn DEPLOY:app
