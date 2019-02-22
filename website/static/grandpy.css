@@ -62,6 +62,7 @@ div.chat-entry {
     display: inline-block;
     flex: 1;
     background-color: #ededed;
+    margin-bottom: 2pc;
 }
 
 div.chat-entry h3 {
