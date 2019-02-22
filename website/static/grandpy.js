@@ -2,6 +2,7 @@
 //             AJAX querying and HTML page updates
 // @author     Sébastien Declercq <sdq@afnor.org>
 // @version    0.0.1 (2019-02-06) : init
+// @version    0.0.2 (2019-02-20) : added a "waiting" class while processing AJAX
 /*jshint esversion: 6 */
 
 class GrandPy {
@@ -17,6 +18,7 @@ class GrandPy {
         // the Flask App to retrieve collected infos based on the
         // user input
         this.form.addEventListener('submit', () => {
+            document.querySelector('body').setAttribute('class', 'waiting');
             let data = new FormData();
             data.append('query', this.input.value);
             let xhr = new XMLHttpRequest();
@@ -37,6 +39,7 @@ class GrandPy {
                         document.createTextNode(answer.answer)
                     );
                 }
+                document.querySelector('body').classList.remove('waiting');
                 this.chat_area.appendChild(chat_entry);
                 this.chat_area.style.display = 'block';
                 this.chat_area.querySelector(
