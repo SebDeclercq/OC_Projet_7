@@ -44,6 +44,7 @@ footer a:hover {
 
 div#chat-area {
     margin-top: 1pc;
+    margin-bottom: 2pc;
     text-align: center;
     height: 30em;
     overflow-y: scroll;
